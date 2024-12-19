@@ -1,7 +1,12 @@
-export default async function Home() {
+// pages/index.js
+import Navbar from "@/components/Navbar";
+
+const Home = () => {
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24 font-bold text-4xl text-blue-600'>
-      Hello, world!
-    </main>
-  )
-}
+    <div>
+      <h1>Welcome to the Home Page</h1>
+    </div>
+  );
+};
+
+export default Home;
