@@ -1,10 +1,9 @@
-// pages/index.js
-import Navbar from "@/components/Navbar";
+import GamesList from "@/components/GamesList";
 
 const Home = () => {
   return (
     <div>
-      <h1>Welcome to the Home Page</h1>
+      <GamesList />
     </div>
   );
 };
