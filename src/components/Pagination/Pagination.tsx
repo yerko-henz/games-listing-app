@@ -17,12 +17,9 @@ export default function Pagination({
         onClick={onLoadMore}
         disabled={isLoading}
         className={`
-          px-6 py-2 border rounded-lg
-          ${
-            isLoading
-              ? "bg-gray-100 cursor-not-allowed"
-              : "hover:bg-gray-50 active:bg-gray-100"
-          }
+          px-6 py-2 border rounded-lg bg-button-bgPrimary active:bg-button-bgPrimary
+          text-text-tertiary
+          ${isLoading ? "cursor-not-allowed" : ""}
           disabled:opacity-50 
           transition-all duration-200
           min-w-[120px]
