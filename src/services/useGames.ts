@@ -14,6 +14,7 @@ export function useGames() {
   const fetchGames = async (page: number, genre?: string) => {
     try {
       setIsLoading(true);
+      setGames([]);
 
       const params = new URLSearchParams();
       if (genre) params.append("genre", genre);
@@ -26,7 +27,6 @@ export function useGames() {
 
       const data: GamesResponse = await response.json();
 
-      console.log("data", data);
       setGames((prevGames) =>
         page === 1 ? data.games : [...prevGames, ...data.games]
       );
@@ -51,8 +51,32 @@ export function useGames() {
   };
 
   useEffect(() => {
-    fetchGames(1, selectedGenre);
+    const initializeGames = () => {
+      const params = new URLSearchParams(window.location.search);
+      const genreFromUrl = params.get("genre");
+
+      if (genreFromUrl) {
+        setSelectedGenre(genreFromUrl);
+        fetchGames(1, genreFromUrl);
+      } else {
+        fetchGames(1, selectedGenre);
+      }
+    };
+
+    initializeGames();
   }, []);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+
+    if (selectedGenre) {
+      url.searchParams.set("genre", selectedGenre);
+    } else {
+      url.searchParams.delete("genre");
+    }
+
+    window.history.pushState({}, "", url);
+  }, [selectedGenre]);
 
   const loadMore = () => {
     const nextPage = currentPage + 1;
