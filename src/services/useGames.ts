@@ -1,20 +1,15 @@
 "use client";
-import { Game, GamesResponse } from "@/app/api/games/types";
-import { useState, useEffect } from "react";
+import { GamesResponse } from "@/app/api/games/types";
+import { useReducer, useEffect } from "react";
+import { initialState, reducer } from "./reducer";
 
 export function useGames() {
-  const [games, setGames] = useState<Game[]>([]);
-  const [filters, setFilters] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const fetchGames = async (page: number, genre?: string) => {
-    try {
-      setIsLoading(true);
+    dispatch({ type: "SET_STATE", payload: { isLoading: true } });
 
+    try {
       const params = new URLSearchParams();
       if (genre) params.append("genre", genre);
       params.append("page", page.toString());
@@ -23,73 +18,68 @@ export function useGames() {
       if (!response.ok) {
         throw new Error("Failed to fetch games");
       }
-
       const data: GamesResponse = await response.json();
 
-      setGames((prevGames) =>
-        page === 1 ? data.games : [...prevGames, ...data.games]
-      );
-
-      if (filters.length === 0) {
-        setFilters(data.availableFilters);
+      if (page === 1) {
+        dispatch({ type: "SET_STATE", payload: { games: data.games } });
+      } else {
+        dispatch({ type: "ADD_GAMES", payload: data.games });
       }
 
-      setHasMore(page < data.totalPages);
+      dispatch({
+        type: "SET_STATE",
+        payload: {
+          filters: data.availableFilters,
+          hasMore: page < data.totalPages,
+        },
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      dispatch({
+        type: "SET_STATE",
+        payload: {
+          error: err instanceof Error ? err.message : "An error occurred",
+        },
+      });
     } finally {
-      setIsLoading(false);
+      dispatch({ type: "SET_STATE", payload: { isLoading: false } });
     }
   };
-
   const handleGenreChange = (newGenre: string) => {
-    setSelectedGenre(newGenre);
-    setCurrentPage(1);
-    setGames([]);
-    fetchGames(1, newGenre);
+    dispatch({
+      type: "SET_STATE",
+      payload: { selectedGenre: newGenre, currentPage: 1, games: [] },
+    });
   };
 
   useEffect(() => {
-    const initializeGames = () => {
-      const params = new URLSearchParams(window.location.search);
-      const genreFromUrl = params.get("genre");
+    const params = new URLSearchParams(window.location.search);
+    const genreFromUrl = params.get("genre") || "";
 
-      if (genreFromUrl) {
-        setSelectedGenre(genreFromUrl);
-        fetchGames(1, genreFromUrl);
-      } else {
-        fetchGames(1, selectedGenre);
-      }
-    };
-
-    initializeGames();
+    dispatch({ type: "SET_STATE", payload: { selectedGenre: genreFromUrl } });
   }, []);
 
   useEffect(() => {
-    const url = new URL(window.location.href);
+    fetchGames(state.currentPage, state.selectedGenre);
+  }, [state.selectedGenre, state.currentPage]);
 
-    if (selectedGenre) {
-      url.searchParams.set("genre", selectedGenre);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (state.selectedGenre) {
+      url.searchParams.set("genre", state.selectedGenre);
     } else {
       url.searchParams.delete("genre");
     }
 
     window.history.pushState({}, "", url);
-  }, [selectedGenre]);
+  }, [state.selectedGenre]);
 
   const loadMore = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    fetchGames(nextPage, selectedGenre);
+    const nextPage = state.currentPage + 1;
+    dispatch({ type: "SET_STATE", payload: { currentPage: nextPage } });
   };
 
   return {
-    games,
-    filters,
-    isLoading,
-    error,
-    hasMore,
-    selectedGenre,
+    ...state,
     handleGenreChange,
     loadMore,
   };
