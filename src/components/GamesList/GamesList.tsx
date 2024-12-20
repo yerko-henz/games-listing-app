@@ -1,5 +1,6 @@
 "use client";
 
+import GameCard from "../GameCard";
 import GenreFilter from "../GenreFilter";
 import Loader from "../Loader";
 import Pagination from "../Pagination";
@@ -30,15 +31,12 @@ export default function GamesList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {games.map((game) => (
-          <div
+          <GameCard
             key={game.id}
-            className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-          >
-            <div className="p-4">
-              <h2 className="font-bold text-lg mb-2">{game.name}</h2>
-              <p className="text-gray-600">{game.genre}</p>
-            </div>
-          </div>
+            id={game.id}
+            name={game.name}
+            genre={game.genre}
+          />
         ))}
       </div>
 
