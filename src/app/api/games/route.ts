@@ -1,16 +1,16 @@
 import { allGames, availableFilters, delay } from "@/utils/endpoint";
+import { GamesResponse } from "./types";
 
 const ITEMS_PER_PAGE = 12;
 
-export async function GET(request: Request) {
+export async function GET(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url);
   const genre = searchParams.get("genre");
   let page = parseInt(searchParams.get("page") ?? "1");
 
-  let games = allGames;
-
+  let filteredGames = allGames;
   if (genre) {
-    games = games.filter(
+    filteredGames = allGames.filter(
       (game) => game.genre.toLowerCase() === genre.toLowerCase()
     );
   }
@@ -22,10 +22,17 @@ export async function GET(request: Request) {
 
   const fromIndex = (page - 1) * ITEMS_PER_PAGE;
   const toIndex = page * ITEMS_PER_PAGE;
-  games = games.slice(fromIndex, toIndex);
+  const paginatedGames = filteredGames.slice(fromIndex, toIndex);
 
-  const totalPages = Math.ceil(allGames.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredGames.length / ITEMS_PER_PAGE);
   const currentPage = page;
 
-  return Response.json({ games, availableFilters, totalPages, currentPage });
+  const jsonResponse: GamesResponse = {
+    games: paginatedGames,
+    availableFilters,
+    totalPages,
+    currentPage,
+  };
+
+  return Response.json(jsonResponse);
 }
