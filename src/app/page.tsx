@@ -29,7 +29,7 @@ const Home = () => {
   };
 
   return (
-    <div className="mt-[50px]">
+    <div>
       <GamesList />
       {showButton && (
         <button
