@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function GameCard({ game }: { game: Game }) {
-  const { name, genre, id, image } = game;
+  const { name, genre, id, image, isNew } = game;
 
   const [isInCart, setIsInCart] = useState(false);
 
@@ -33,7 +33,7 @@ export default function GameCard({ game }: { game: Game }) {
   return (
     <div
       key={id}
-      className="border border-border-primary rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col
+      className="relative border border-border-primary rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col
                  w-[380px] h-[450px] max-w-full mx-auto 
                  sm:w-full sm:h-[400px]
                  lg:w-[380px] lg:h-[450px]"
@@ -42,6 +42,11 @@ export default function GameCard({ game }: { game: Game }) {
         className="relative w-[calc(100%-40px)] h-[450px] m-5
                     sm:h-[240px]"
       >
+        {isNew && (
+          <span className="absolute top-2 left-2 bg-white text-text-primary border border-border-primary w-[50px] h-[30px] flex items-center justify-center text-sm rounded z-[1]">
+            New
+          </span>
+        )}
         <div className="overflow-hidden">
           <Image
             src={image}
@@ -66,10 +71,11 @@ export default function GameCard({ game }: { game: Game }) {
         <button
           onClick={handleCartAction}
           className={`${
-            isInCart
-              ? "bg-page-bgTertiary text-button-bgSecondary"
-              : "bg-button-bgSecondary text-text-primary border border-border-secondary"
-          } py-2 rounded-lg transition-colors duration-200 w-full hover:bg-page-bgTertiary hover:text-button-bgSecondary`}
+            !isInCart
+              ? "bg-button-bgSecondary focus:bg-button-bgSecondary text-text-primary border border-border-secondary"
+              : "bg-page-bgTertiary focus:bg-page-bgTertiary text-button-bgSecondary border border-border-secondary"
+          } py-2 rounded-lg transition-colors duration-200 w-full 
+          `}
         >
           {isInCart ? "Remove from Cart" : "Add to Cart"}
         </button>
