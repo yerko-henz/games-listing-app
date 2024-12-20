@@ -47,7 +47,7 @@ export default function GameCard({ game }: { game: Game }) {
             New
           </span>
         )}
-        <div className="overflow-hidden">
+        <div className="relative overflow-hidden h-full">
           <Image
             src={image}
             alt={name}
