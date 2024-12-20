@@ -22,7 +22,7 @@ export default function GamesList() {
   if (error) return <div className="mx-8">Error: {error}</div>;
 
   return (
-    <div className="m-8">
+    <div className="m-4 sm:m-8">
       <GenreFilter
         filters={filters}
         selectedGenre={selectedGenre}

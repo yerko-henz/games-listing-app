@@ -38,12 +38,13 @@ const Navbar = () => {
               fill="#585660"
             />
           </svg>
+
+          {cartCount > 0 && (
+            <span className="absolute bottom-0 left-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
         </Link>
-        {cartCount > 0 && (
-          <span className="absolute bottom-0 left-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-            {cartCount}
-          </span>
-        )}
       </div>
     </nav>
   );
