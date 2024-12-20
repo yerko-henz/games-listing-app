@@ -26,6 +26,8 @@ export default function GameCard({ game }: { game: Game }) {
       localStorage.setItem("cart", JSON.stringify(newCart));
       setIsInCart(true);
     }
+
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   return (

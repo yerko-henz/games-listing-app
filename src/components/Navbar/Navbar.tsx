@@ -1,12 +1,30 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartCount(cart.length);
+    };
+
+    updateCartCount();
+
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    return () => window.removeEventListener("cartUpdated", updateCartCount);
+  }, []);
+
   return (
     <nav className="bg-page-bgPrimary p-4 flex justify-between items-center">
       <Link href="/" className="text-text-primary text-xl font-medium">
         GamerShop
       </Link>
-      <div>
+      <div className="relative">
         <Link href="/cart" className="text-text-primary">
           <svg
             width="24"
@@ -21,6 +39,11 @@ const Navbar = () => {
             />
           </svg>
         </Link>
+        {cartCount > 0 && (
+          <span className="absolute bottom-0 left-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            {cartCount}
+          </span>
+        )}
       </div>
     </nav>
   );
