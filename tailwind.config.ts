@@ -22,6 +22,7 @@ const config: Config = {
         text: {
           primary: "#3B3B3B",
           secondary: "#737373",
+          tertiary: "#FFFFFF",
         },
         border: {
           primary: "#8F8F8F",
