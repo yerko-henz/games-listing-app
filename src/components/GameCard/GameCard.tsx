@@ -1,6 +1,6 @@
 "use client";
 
-import { Game } from "@/app/api/games/types";
+import { Game } from "@/utils/endpoint";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 

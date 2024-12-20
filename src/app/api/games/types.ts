@@ -1,12 +1,4 @@
-export interface Game {
-  id: string;
-  genre: string;
-  image: string;
-  name: string;
-  description: string;
-  price: number;
-  isNew: boolean;
-}
+import { Game } from "@/utils/endpoint";
 
 export interface GamesResponse {
   games: Game[];
