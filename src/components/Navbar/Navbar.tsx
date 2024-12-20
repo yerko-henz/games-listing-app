@@ -20,7 +20,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-page-bgPrimary p-4 flex justify-between items-center">
+    <nav className="bg-page-bgPrimary p-4 flex justify-between items-center fixed top-0 left-0 w-full z-50 shadow-md">
       <Link href="/" className="text-text-primary text-xl font-medium">
         GamerShop
       </Link>

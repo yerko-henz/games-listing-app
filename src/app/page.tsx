@@ -2,7 +2,7 @@ import GamesList from "@/components/GamesList";
 
 const Home = () => {
   return (
-    <div>
+    <div className="mt-[50px]">
       <GamesList />
     </div>
   );
