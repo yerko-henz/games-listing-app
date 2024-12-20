@@ -2,8 +2,32 @@
 
 import { Game } from "@/app/api/games/types";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export default function GameCard({ name, genre, id, image }: Game) {
+export default function GameCard({ game }: { game: Game }) {
+  const { name, genre, id, image } = game;
+
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setIsInCart(cart.some((game: Game) => game.id === id));
+  }, [id]);
+
+  const handleCartAction = () => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (isInCart) {
+      const newCart = cart.filter((game: Game) => game.id !== id);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      setIsInCart(false);
+    } else {
+      const newCart = [...cart, game];
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      setIsInCart(true);
+    }
+  };
+
   return (
     <div
       key={id}
@@ -38,10 +62,14 @@ export default function GameCard({ name, genre, id, image }: Game) {
 
       <div className="px-5 pb-5 mt-auto">
         <button
-          onClick={() => {}}
-          className="bg-button-bgSecondary hover:bg-page-bgTertiary text-text-primary border border-border-secondary py-2 rounded-lg transition-colors duration-200 w-full"
+          onClick={handleCartAction}
+          className={`${
+            isInCart
+              ? "bg-page-bgTertiary text-button-bgSecondary"
+              : "bg-button-bgSecondary text-text-primary border border-border-secondary"
+          } py-2 rounded-lg transition-colors duration-200 w-full hover:bg-page-bgTertiary hover:text-button-bgSecondary`}
         >
-          Add to Cart
+          {isInCart ? "Remove from Cart" : "Add to Cart"}
         </button>
       </div>
     </div>
