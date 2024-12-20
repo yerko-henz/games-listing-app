@@ -14,7 +14,6 @@ export function useGames() {
   const fetchGames = async (page: number, genre?: string) => {
     try {
       setIsLoading(true);
-      setGames([]);
 
       const params = new URLSearchParams();
       if (genre) params.append("genre", genre);
