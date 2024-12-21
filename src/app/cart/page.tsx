@@ -51,7 +51,7 @@ export default function Cart() {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full">
                 <span className="text-sm text-text-secondary mb-1">
                   {item.genre}
                 </span>
