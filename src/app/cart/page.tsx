@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Game } from "@/utils/endpoint";
 
 export default function Cart() {
@@ -24,6 +25,12 @@ export default function Cart() {
   return (
     <div className="mx-4 sm:mx-12 mb-4">
       <div className="mb-4">
+        <Link
+          href="/"
+          className="text-text-secondary hover:underline mb-3 block"
+        >
+          &larr; Back to Catalog
+        </Link>
         <h1 className="text-2xl font-bold text-text-primary">Your Cart</h1>
         <p className="text-lg text-text-secondary">
           {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
