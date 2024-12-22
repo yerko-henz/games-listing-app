@@ -11,7 +11,7 @@ export function useGames() {
 
     try {
       const params = new URLSearchParams();
-      if (genre !== undefined) params.append("genre", genre);
+      if (genre && genre !== "") params.append("genre", genre);
       params.append("page", page.toString());
 
       const response = await fetch(`/api/games?${params.toString()}`);
@@ -50,38 +50,31 @@ export function useGames() {
       type: "SET_STATE",
       payload: { selectedGenre: newGenre, currentPage: 1, games: [] },
     });
+
+    const url = new URL(window.location.href);
+
+    if (newGenre === "") {
+      url.searchParams.delete("genre");
+    } else {
+      url.searchParams.set("genre", newGenre);
+    }
+    window.history.pushState({}, "", url);
+    fetchGames(1, newGenre);
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const genreFromUrl = params.get("genre") || "";
+    const genreFromUrl =
+      new URLSearchParams(window?.location.search).get("genre") || "";
 
     dispatch({ type: "SET_STATE", payload: { selectedGenre: genreFromUrl } });
+
+    fetchGames(1, genreFromUrl);
   }, []);
-
-  useEffect(() => {
-    if (state.currentPage !== undefined) {
-      fetchGames(state.currentPage, state.selectedGenre);
-    }
-  }, [state.selectedGenre, state.currentPage]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const genreFromUrl = params.get("genre") || "";
-
-    const url = new URL(window.location.href);
-    if (state.selectedGenre) {
-      url.searchParams.set("genre", state.selectedGenre);
-    } else if (!genreFromUrl) {
-      url.searchParams.delete("genre");
-    }
-
-    window.history.pushState({}, "", url);
-  }, [state.selectedGenre]);
 
   const loadMore = () => {
     const nextPage = state.currentPage + 1;
     dispatch({ type: "SET_STATE", payload: { currentPage: nextPage } });
+    fetchGames(nextPage, state.selectedGenre);
   };
 
   return {
