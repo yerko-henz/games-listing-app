@@ -1,4 +1,3 @@
-import Loader from "../Loader";
 import { GenreFilterProps } from "./types";
 
 export default function GenreFilter({

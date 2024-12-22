@@ -24,14 +24,11 @@ export default function Cart() {
 
   return (
     <div className="mx-4 sm:mx-12 mb-4">
+      <Link href="/" className="text-text-secondary hover:underline mb-3 block">
+        &larr; Back to Catalog
+      </Link>
       {cartItems.length === 0 ? (
         <div className="mb-4">
-          <Link
-            href="/"
-            className="text-text-secondary hover:underline mb-3 block"
-          >
-            &larr; Back to Catalog
-          </Link>
           <p className="text-lg text-text-primary">No items in your cart</p>
         </div>
       ) : (
