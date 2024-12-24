@@ -15,7 +15,9 @@ export function useGames() {
       params.append("page", page.toString());
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}?${params.toString()}`
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "/api/games"
+        }?${params.toString()}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch games");

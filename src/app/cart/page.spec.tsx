@@ -1,5 +1,3 @@
-// __tests__/Cart.test.tsx
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import Cart from "./page";
 import { Game } from "@/utils/endpoint";
