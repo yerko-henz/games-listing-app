@@ -14,7 +14,9 @@ export function useGames() {
       if (genre && genre !== "") params.append("genre", genre);
       params.append("page", page.toString());
 
-      const response = await fetch(`/api/games?${params.toString()}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}?${params.toString()}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch games");
       }
