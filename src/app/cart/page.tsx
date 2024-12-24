@@ -109,7 +109,9 @@ export default function Cart() {
 
                 <div className="flex justify-between text-lg font-bold text-text-primary mb-4">
                   <span>Order Total</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span data-testid="total-price">
+                    ${totalPrice.toFixed(2)}
+                  </span>
                 </div>
               </div>
               <button className="w-full bg-button-bgPrimary text-button-bgSecondary py-2 rounded-lg font-semibold hover:bg-button-bgPrimary-dark mt-4">
