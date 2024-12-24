@@ -59,6 +59,11 @@ export default function Cart() {
                       objectFit="cover"
                       className="rounded"
                     />
+                    {item.isNew && (
+                      <span className="absolute top-1 left-1 bg-white text-text-primary border border-border-primary w-[40px] h-[20px] flex items-center justify-center text-sm rounded z-[1]">
+                        New
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-col w-full">
